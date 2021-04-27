@@ -7,15 +7,22 @@ class Color:
 
 	def setColor(self,R,G,B):
 		#int 0 <= R,G,B, <= 255
-		self.R = R
-		self.G = G
-		self.B = B
-	
-	def __list__(self):
-		return [self.R,self.G,self.B]
-	
+		try:
+			self.R = int(R)
+			self.G = int(G)
+			self.B = int(B)
+			if(0 <= self.R <= 255 and 0 <= self.G <= 255 and 0 <= self.B <= 255):
+				return True
+			else:
+				raise ValueError(int)
+		except:
+			self.R = 0
+			self.G = 0
+			self.B = 0
+			return False
+
 	def getColor(self):
-		return np.ndarray(list(self))
+		return np.array([self.R,self.G,self.B])
 
 class LED_Cube:
 	def __init__(self,n=5):
@@ -26,8 +33,21 @@ class LED_Cube:
 		self.cube = np.zeros((self.n,self.n,self.n,3))
 	
 	def set_color(self,x,y,z,color):
-		#int x,y,z >= 0 and color isInstans(Color)
-		self.cube[x,y,z] = color.getColor()
+		#int 0 <= x,y,z < self.n and color isInstans(Color)
+		if(isinstance(x,int) and isinstance(y,int) and isinstance(z,int), isinstance(color,Color)):
+			if(0 <= x < self.n and 0 <= y < self.n and 0 <= z < self.n):
+				self.cube[x,y,z] = color.getColor()
+				return True
+		else:
+			return False
+		
+	"""
+	def __setitem__(self,xyz,color):
+	"""
+
+	def __getitem__(self,key):
+		return self.cube[key]
+
 
 	def output(self):
 		pass
@@ -84,6 +104,12 @@ class gobang:
 		print(self.cube)
 
 if __name__ == "__main__":
-	five = gobang()
-	five.printCube()
+	#five = gobang()
+	#five.printCube()
+	c = Color(3,5,7)
+	cube = LED_Cube(2)
+	#print(cube)
+	cube.set_color(0,0,0,c)
+	print(cube[0,0,0])
+
 	
