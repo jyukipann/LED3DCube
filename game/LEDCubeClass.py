@@ -50,37 +50,79 @@ class LED_Cube:
 
 
 	def output(self):
+		#転置必要
 		pass
 
 	def __str__(self):
 		return str(self.cube)
 
 
-class gobang:
-	def __init__(self,n=5):
-		self.n = n
+class gobang3d(LED_Cube):
+	def __init__(self,n=5, p1="player1", p2="player2",c1=(255,0,0),c2=(0,255,0)):
+		super(gobang3d,self).__init__(n=5)
 		self.dir = [[1,0,0],[0,1,0],[0,0,1],[1,1,0],[0,1,1],[1,0,1],[1,1,1]]
-		self.cube = None
-		self.reset_cube()
-		self.p1 = ""
-		self.p2 = ""
-
-	def reset_cube(self):
-		self.cube = np.zeros((self.n,self.n,self.n))
+		self.players = {p1:Color(*c1),p2:Color(*c2)}
 		
 	def set_player(self, p1, p2):
 		self.p1 = p1
 		self.p2 = p2
 
-	def isfinish(self):
+	def isfinish(self,x,y,z):
 		#スレッドを用いて並行して、一列揃っているところを探す。
-		pass
+		now_x = x
+		now_y = y
+		now_z = z
+		color = self.cube[x,y,z]
+		for dir in self.dir:
+			count = 1
+			while(0 <= now_x+dir[0] < self.n and 0 <= now_y+dir[1] < self.n and 0 <= now_z+dir[2] < self.n):
+				now_x += dir[0]
+				now_y += dir[1]
+				now_z += dir[2]
+				if(color == self.cube[now_x,now_y,now_z]):
+					count +=1
+				else:
+					break
+			while(0 <= now_x-dir[0] < self.n and 0 <= now_y-dir[1] < self.n and 0 <= now_z-dir[2] < self.n):
+				now_x -= dir[0]
+				now_y -= dir[1]
+				now_z -= dir[2]
+				if(color == self.cube[now_x,now_y,now_z]):
+					count +=1
+				else:
+					break
+			if(count == self.n):
+				return True
+			else:
+				return False
+
+	def getSelected(self,x,y,z,player):
+		color = None
+		try:
+			color = self.players[player]
+		except:
+			return False
+		try:
+			if(self.cube[x,y,z] == color.getColor()):
+				self.setColor(x,y,z,color)
+				return True
+		except:
+			return False
+		return False
 
 	def start_game(self):
 		self.reset_cube()
-		if(self.p1 == "" or self.p2 == ""):
-			return
 		#start
+		for player in self.players:
+			while(not getSelected(*list(map(int,input().split())),self.players[player])):
+				pass
+			if(isfinish(x,y,z)):
+				break
+
+
+	def win(self,player):
+		print("win :",player)
+
 		#p1
 		#isfinish
 		#p2
