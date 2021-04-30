@@ -31,13 +31,15 @@ class LED_Cube:
 
 	def __reset__(self):
 		self.cube = np.zeros((self.n,self.n,self.n,3))
+
+	def inIndex(self,x,y,z):
+		return (isinstance(x,int) and isinstance(y,int) and isinstance(z,int)) and (0 <= x < self.n and 0 <= y < self.n and 0 <= z < self.n)
 	
 	def set_color(self,x,y,z,color):
 		#int 0 <= x,y,z < self.n and color isInstans(Color)
-		if(isinstance(x,int) and isinstance(y,int) and isinstance(z,int), isinstance(color,Color)):
-			if(0 <= x < self.n and 0 <= y < self.n and 0 <= z < self.n):
-				self.cube[x,y,z] = color.getColor()
-				return True
+		if(self.inIndex(x,y,z) and isinstance(color,Color)):
+			self.cube[x,y,z] = color.getColor()
+			return True
 		else:
 			return False
 		
@@ -79,7 +81,7 @@ class gobang3d(LED_Cube):
 				now_x += dir[0]
 				now_y += dir[1]
 				now_z += dir[2]
-				if(color == self.cube[now_x,now_y,now_z]):
+				if(np.all(color == self.cube[now_x,now_y,now_z])):
 					count +=1
 				else:
 					break
@@ -93,32 +95,27 @@ class gobang3d(LED_Cube):
 					break
 			if(count == self.n):
 				return True
-			else:
-				return False
+		#すべて埋まっているかの判定
+		return not np.any((self.cube == np.array([0,0,0])).all(axis=3))
 
 	def getSelected(self,x,y,z,player):
-		color = None
-		try:
-			color = self.players[player]
-		except:
-			return False
-		try:
-			if(self.cube[x,y,z] == color.getColor()):
-				self.setColor(x,y,z,color)
-				return True
-		except:
-			return False
+		if(np.all(self.cube[x,y,z] == np.array([0,0,0]))):
+			self.set_color(x,y,z,self.players[player])
+			return True
 		return False
+		
 
 	def start_game(self):
 		self.__reset__()
+		print("gobang",self.n,self.players)
 		#start
 		while True:
 			for player in self.players:
+				print(player)
 				x,y,z = 0,0,0
 				while(True):
 					x, y, z, *_ = list(map(int,input().split()))
-					if not self.getSelected(x,y,z,self.players[player]):
+					if (self.inIndex(z,y,z)) and not self.getSelected(x,y,z,player):
 						break
 				if(self.isfinish(x,y,z)):
 					self.win(player)
@@ -154,4 +151,6 @@ if __name__ == "__main__":
 	cube.set_color(0,0,0,c)
 	print(cube[0,0,0])
 
-	
+
+	go = gobang3d()
+	go.start_game()
