@@ -51,7 +51,7 @@ class LED_Cube:
 
 	def output(self):
 		#転置必要
-		pass
+		print(str(self))
 
 	def __str__(self):
 		return str(self.cube)
@@ -111,22 +111,22 @@ class gobang3d(LED_Cube):
 		return False
 
 	def start_game(self):
-		self.reset_cube()
+		self.__reset__()
 		#start
-		for player in self.players:
-			while(not getSelected(*list(map(int,input().split())),self.players[player])):
-				pass
-			if(isfinish(x,y,z)):
-				break
+		while True:
+			for player in self.players:
+				x,y,z = 0,0,0
+				while(True):
+					x, y, z, *_ = list(map(int,input().split()))
+					if not self.getSelected(x,y,z,self.players[player]):
+						break
+				if(self.isfinish(x,y,z)):
+					self.win(player)
+					return
 
 
 	def win(self,player):
 		print("win :",player)
-
-		#p1
-		#isfinish
-		#p2
-		#isfinish
 
 	
 	def lightUp(self,x,y,z,color):
