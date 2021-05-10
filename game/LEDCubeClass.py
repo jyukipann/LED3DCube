@@ -27,10 +27,10 @@ class Color:
 		return np.array([self.R,self.G,self.B],dtype="i2")
 
 	def getCode(self):
-		print("getCode")
+		#print("getCode")
 		if(self.R == 0 and self.G == 0 and self.B == 0):
 			return ""
-		print("#"+str(hex(self.R))[2:]+str(hex(self.G))[2:]+str(hex(self.B))[2:])
+		#print("#"+str(hex(self.R))[2:]+str(hex(self.G))[2:]+str(hex(self.B))[2:])
 		return "#"+str(hex(self.R))[2:]+str(hex(self.G))[2:]+str(hex(self.B)[2:])
 
 class LED_Cube:
@@ -186,10 +186,11 @@ def draw_cube(canvas,Cube):
 	for x in range(Cube.n):
 		for y in range(Cube.n):
 			for z in range(Cube.n):
-				X,Y = xyz2xy(x,y,z,Cube.n)
 				color = Color(*Cube[x,y,z]).getCode()
 				if(color == ""):
 					continue
+				X,Y = xyz2xy(x,y,z,Cube.n)
+				print(X,Y)
 				canvas.create_oval(X-3,Y-3,X+3,Y+3,fill=color)
 
 def xyz2xy(x,y,z,n):
@@ -201,19 +202,21 @@ def xyz2xy(x,y,z,n):
 	zv = (0,int(hi/2/n))
 	X = xv[0]*x + yv[0]*y + zv[0]*z + off/2
 	Y = xv[1]*x + yv[1]*y + zv[1]*z + off/2
-	return (X,Y)
+	return (X,Y+hi*3/4)
 
 
 cube_canvas = None 
 w = 310
 h = 310
 off = 10
-def main():
+def mainV1():
 	root = tk.Tk()
 	root.title(u"LEDCubeClass_main()")
 	root.geometry("800x480")
 	go = gobang3d(n=3)
 	go.set_color(0,0,0,Color(254,254,254))
+	go.set_color(0,2,1,Color(127,127,254))
+	go.set_color(2,2,2,Color(127,127,127))
 	print(go.cube)
 	generate_cube_win()
 	draw_cube(cube_canvas, go)
@@ -233,4 +236,4 @@ def test():
 	go.start_game()
 
 if __name__ == "__main__":
-	main()
+	mainV1()
