@@ -2,6 +2,7 @@ import numpy as np
 import threading as thread
 import tkinter as tk
 from tkinter import messagebox as mg
+from collections import deque
 
 class Color:
 	def __init__(self,R,G,B):
@@ -69,11 +70,13 @@ class LED_Cube:
 
 
 class gobang3d(LED_Cube):
-	def __init__(self,n=5, players=["player1","player2"]):
+	def __init__(self, n=5, players=["player1","player2"]):
 		super(gobang3d,self).__init__(n)
 		self.dir = [[1,0,0],[0,1,0],[0,0,1],[1,1,0],[0,1,1],[1,0,1],[1,1,1]]
 		self.players = dict(zip(players,[Color(0,0,0) for i in range(len(players))]))
+		self.players_order = deque(players, len(players))
 		self.game_mode = 0 # 0 == init, 1 == playing, -1 == finished
+		self.turn = dict(zip(players,[0 for i in range(len(players))]))
 
 	def set_player_color(self,player,R,G,B):
 		return self.players[player].setColor(R,G,B)
@@ -106,23 +109,41 @@ class gobang3d(LED_Cube):
 			if(count == self.n):
 				return True
 		#すべて埋まっているかの判定
-		return not np.any((self.cube == np.array([0,0,0])).all(axis=3))
+		return sum(self.turn.items) >= self.n**3
 
-	def getSelected(self,x,y,z,player):
-		print(self.cube[x,y,z])
-		print(np.array([0,0,0],dtype="i2"))
-		if(np.all(self.cube[x,y,z] == np.array([0,0,0],dtype="i2"))):
-			print("set color ",player)
-			self.set_color(x,y,z,self.players[player])
-			return True
-		print("False")
-		return False
+	def getSelected(self,x,y,z):
+		if(self.game_mode == 0):
+			print("not start yet")
+			return False
+		elif(self.game_mode == 1):
+			print(self.cube[x,y,z])
+			print(np.array([0,0,0],dtype="i2"))
+			if(np.all(self.cube[x,y,z] == np.array([0,0,0],dtype="i2"))):
+				print("set color ", self.players_order[0])
+				self.set_color(x,y,z,self.players[self.players_order])
+				self.turn[self.players_order[0]] += 1
+				self.players_order.rotate()
+				return True
+			print("False")
+			return False
+		else:
+			return False
 		
 
 	def start_game(self):
-		self.__reset__()
-		print("gobang",self.n,self.players)
+		if(self.game_mode == 0):
+			self.__reset__()
+			print("gobang",self.n,self.players)
+		elif(self.game_mode == 1):
+			print("already started")
+			return
+		elif(self.game_mode == -1):
+			return
+		else:
+			return
+		
 		#start
+		
 		"""
 		while True:
 			for player in self.players:
@@ -139,22 +160,9 @@ class gobang3d(LED_Cube):
 		"""
 
 
-	def win(self,player):
-		print("win :",player)
+	def win(self, player):
+		print("win :", player)
 
-	
-	def lightUp(self,x,y,z,color):
-		try:
-			x = int(x)
-			y = int(y)
-			z = int(z)
-		except:
-			return None
-		if(self.cube[x,y,z] == 0):
-			self.cube[x,y,z]
-			return True
-		else:
-			return False
 		
 	def printCube(self):
 		print(self.cube)
@@ -167,7 +175,7 @@ def generate_cube_win():
 	cube_canvas = tk.Canvas(cube_window, width = w, height = h)
 	cube_canvas.place(x = 0, y = 0)
 
-def draw_cube(canvas,Cube):
+def draw_cube(canvas, Cube):
 	global w,h,off
 	canvas.delete('all')
 	canvas.create_rectangle(0,0,w,h, fill="white")
