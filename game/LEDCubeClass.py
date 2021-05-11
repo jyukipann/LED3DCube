@@ -124,7 +124,6 @@ class gobang3d(LED_Cube):
 				self.turn[self.players_order[0]] += 1
 				self.players_order.rotate()
 				return True
-			print("False")
 			return False
 		else:
 			return False
