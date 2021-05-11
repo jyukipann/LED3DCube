@@ -35,7 +35,7 @@ class Color:
 
 class LED_Cube:
 	def __init__(self,n=5):
-		self.n = 5
+		self.n = n
 		self.cube = np.zeros((self.n,self.n,self.n,3),dtype="i2")
 
 	def __reset__(self):
@@ -189,7 +189,7 @@ def draw_cube(canvas,Cube):
 				color = Color(*Cube[x,y,z]).getCode()
 				if(color == ""):
 					continue
-				X,Y = xyz2xy(x,y,z,Cube.n)
+				X,Y = xyz2xy(x,y,z,Cube.n-1)
 				print(X,Y)
 				canvas.create_oval(X-3,Y-3,X+3,Y+3,fill=color)
 
@@ -197,9 +197,9 @@ def xyz2xy(x,y,z,n):
 	global w, h, off
 	wi = w - off
 	hi = h - off
-	xv = (int(wi/4/n),int(hi/4/n))
-	yv = (int(wi/4/n),-1*int(hi/4/n))
-	zv = (0,int(hi/2/n))
+	xv = (int(wi/2/n),int(hi/4/n))
+	yv = (int(wi/2/n),-1*int(hi/4/n))
+	zv = (0,-1*int(hi/2/n))
 	X = xv[0]*x + yv[0]*y + zv[0]*z + off/2
 	Y = xv[1]*x + yv[1]*y + zv[1]*z + off/2
 	return (X,Y+hi*3/4)
@@ -215,8 +215,11 @@ def mainV1():
 	root.geometry("800x480")
 	go = gobang3d(n=3)
 	go.set_color(0,0,0,Color(254,254,254))
+	go.set_color(1,0,0,Color(254,254,254))
+	go.set_color(0,1,0,Color(254,254,254))
+	go.set_color(0,0,1,Color(254,254,254))
 	go.set_color(0,2,1,Color(127,127,254))
-	go.set_color(2,2,2,Color(127,127,127))
+	go.set_color(2,2,2,Color(127,255,127))
 	print(go.cube)
 	generate_cube_win()
 	draw_cube(cube_canvas, go)
