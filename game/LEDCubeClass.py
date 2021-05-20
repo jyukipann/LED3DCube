@@ -82,34 +82,37 @@ class gobang3d(LED_Cube):
 		return self.players[player].setColor(R,G,B)
 	
 	def isfinish(self,x,y,z):
-		#スレッドを用いて並行して、一列揃っているところを探す。
-		now_x = x
-		now_y = y
-		now_z = z
-		color = self.cube[x,y,z]
-		print("isfinish")
-		for dir in self.dir:
-			count = 1
-			while(0 <= now_x+dir[0] < self.n and 0 <= now_y+dir[1] < self.n and 0 <= now_z+dir[2] < self.n):
-				now_x += dir[0]
-				now_y += dir[1]
-				now_z += dir[2]
-				if(np.all(color == self.cube[now_x,now_y,now_z])):
-					count +=1
-				else:
-					break
-			while(0 <= now_x-dir[0] < self.n and 0 <= now_y-dir[1] < self.n and 0 <= now_z-dir[2] < self.n):
-				now_x -= dir[0]
-				now_y -= dir[1]
-				now_z -= dir[2]
-				if(np.all(self.cube[now_x,now_y,now_z] == color)):
-					count +=1
-				else:
-					break
-			if(count == self.n):
-				return True
-		#すべて埋まっているかの判定
-		return sum(self.turn.items) >= self.n**3
+		if(self.game_mode == 1):
+			#スレッドを用いて並行して、一列揃っているところを探す。
+			now_x = x
+			now_y = y
+			now_z = z
+			color = self.cube[x,y,z]
+			print("isfinish")
+			for dir in self.dir:
+				count = 1
+				while(0 <= now_x+dir[0] < self.n and 0 <= now_y+dir[1] < self.n and 0 <= now_z+dir[2] < self.n):
+					now_x += dir[0]
+					now_y += dir[1]
+					now_z += dir[2]
+					if(np.all(color == self.cube[now_x,now_y,now_z])):
+						count +=1
+					else:
+						break
+				while(0 <= now_x-dir[0] < self.n and 0 <= now_y-dir[1] < self.n and 0 <= now_z-dir[2] < self.n):
+					now_x -= dir[0]
+					now_y -= dir[1]
+					now_z -= dir[2]
+					if(np.all(self.cube[now_x,now_y,now_z] == color)):
+						count +=1
+					else:
+						break
+				if(count == self.n):
+					return True
+			#すべて埋まっているかの判定
+			return sum(self.turn.items) >= self.n**3
+		else:
+			return True
 
 	def getSelected(self,x,y,z):
 		if(self.game_mode == 0):
