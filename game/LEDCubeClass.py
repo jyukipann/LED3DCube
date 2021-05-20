@@ -3,6 +3,17 @@ import threading as thread
 import tkinter as tk
 from tkinter import messagebox as mg
 from collections import deque
+#from rpi_ws281x import *
+import rpi_ws281x
+# LED strip configuration:
+#LED_COUNT      = 3      # Number of LED pixels.
+LED_PIN        = 12      # GPIO pin connected to the pixels (18 uses PWM!).
+#LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
+LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
+LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
+LED_BRIGHTNESS = 12     # Set to 0 for darkest and 255 for brightest
+LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
+LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 class Color:
 	def __init__(self,R,G,B):
@@ -38,6 +49,8 @@ class LED_Cube:
 	def __init__(self,n=5):
 		self.n = n
 		self.cube = np.zeros((self.n,self.n,self.n,3),dtype="i2")
+		global LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL
+		self.strip = rpi_ws281x.Adafruit_NeoPixel(n**3, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 
 	def __reset__(self):
 		self.cube = np.zeros((self.n,self.n,self.n,3),dtype="i2")
@@ -63,7 +76,9 @@ class LED_Cube:
 
 	def output(self):
 		#転置必要
-		print(str(self))
+		flat = self.cube.flatten()
+		for i in range(self.n ** 3):
+			rpi_ws281x.strip.setPixelColor(i*3, rpi_ws281x.Color(flat[i*3],flat[i*3+1],flat[i*3+2]))
 
 	def __str__(self):
 		return str(self.cube)
