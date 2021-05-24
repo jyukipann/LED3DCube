@@ -1,8 +1,9 @@
 import numpy as np
-import threading as thread
+import threading
 import tkinter as tk
 from tkinter import messagebox as mg
 from collections import deque
+import time
 #from rpi_ws281x import *
 import rpi_ws281x
 # LED strip configuration:
@@ -51,6 +52,9 @@ class LED_Cube:
 		self.cube = np.zeros((self.n,self.n,self.n,3),dtype="i2")
 		global LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL
 		self.strip = rpi_ws281x.Adafruit_NeoPixel(n**3, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+		self.outputing = threading.Thread(target=self.output)
+		self.outputing.start()
+		self.destory = False
 
 	def __reset__(self):
 		self.cube = np.zeros((self.n,self.n,self.n,3),dtype="i2")
@@ -75,13 +79,21 @@ class LED_Cube:
 
 
 	def output(self):
-		#転置必要
-		flat = self.cube.flatten()
-		for i in range(self.n ** 3):
-			rpi_ws281x.strip.setPixelColor(i*3, rpi_ws281x.Color(flat[i*3],flat[i*3+1],flat[i*3+2]))
+		while not self.destory:
+			#転置必要
+			flat = self.cube.flatten()
+			for i in range(self.n ** 3):
+				self.strip.setPixelColor(i*3, rpi_ws281x.Color(flat[i*3],flat[i*3+1],flat[i*3+2]))
+			self.strip.show()
+			time.sleep(16.6/1000.0)
+		
 
 	def __str__(self):
 		return str(self.cube)
+
+	def __del__(self):
+		self.destory = True
+		self.outputing.join()
 
 
 class gobang3d(LED_Cube):
