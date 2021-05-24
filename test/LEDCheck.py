@@ -101,6 +101,7 @@ if __name__ == '__main__':
 			colorWipe(strip, Color(255, 0, 0))  # Red wipe
 			colorWipe(strip, Color(0, 255, 0))  # Blue wipe
 			colorWipe(strip, Color(0, 0, 255))  # Green wipe
+			"""
 			print ('Theater chase animations.')
 			theaterChase(strip, Color(127, 127, 127))  # White theater chase
 			theaterChase(strip, Color(127,   0,   0))  # Red theater chase
@@ -109,6 +110,7 @@ if __name__ == '__main__':
 			rainbow(strip)
 			rainbowCycle(strip)
 			theaterChaseRainbow(strip)
+			"""
 
 	except KeyboardInterrupt:
 		if args.clear:
