@@ -8,18 +8,50 @@
 import time
 from rpi_ws281x import *
 import argparse
+import numpy as np
+import random
 
 # LED strip configuration:
-LED_COUNT      = 6      # Number of LED pixels.
+LED_COUNT      = 125      # Number of LED pixels.
 LED_PIN        = 12      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 12     # Set to 0 for darkest and 255 for brightest
+LED_BRIGHTNESS = 225     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
+m2s = np.array(
+	[[[  4,   3 ,  2 ,  1 ,  0],
+	[  5  , 6 ,  7  , 8  , 9],
+	[ 14 , 13 , 12,  11 , 10],
+	[ 15 , 16,  17 , 18,  19],
+	[ 24 , 23,  22,  21  ,20],],
 
+	[[ 45 , 46 , 47,  48  ,49],
+	[ 44 , 43 , 42,  41 , 40],
+	[ 35 , 36  ,37 , 38,  39],
+	[ 34,  33 , 32 , 31 , 30],
+	[ 25,  26 , 27  ,28 , 29],],
+
+	[[ 54  ,53 , 52,  51 , 50],
+	[ 55 , 56,  57 , 58 , 59],
+	[ 64,  63,  62 , 61 , 60],
+	[ 65,  66 , 67 , 68  ,69],
+	[ 74  ,73,  72  ,71  ,70],],
+
+	[[ 95  ,96 , 97 , 98  ,99],
+	[ 94 , 93 , 92 , 91  ,90],
+	[ 85 , 86 , 87 , 88 , 89],
+	[ 84 , 83 , 82 , 81 , 80],
+	[ 75  ,76  ,77 , 78,  79],],
+
+	[[104, 103, 102 ,101 ,100],
+	[105, 106 ,107 ,108 ,109],
+	[114 ,113 ,112 ,111 ,110],
+	[115 ,116, 117, 118, 119],
+	[124, 123, 122, 121, 120],]]
+)
 
 # Define functions which animate LEDs in various ways.
 def colorWipe(strip, color, wait_ms=50):
@@ -78,6 +110,48 @@ def theaterChaseRainbow(strip, wait_ms=50):
 			for i in range(0, strip.numPixels(), 3):
 				strip.setPixelColor(i+q, 0)
 
+def strip2mat(strip, mat5):
+	#strip.numPixels()
+	global m2s
+	for z in range(5):
+		for y in range(5):
+			for x in range(5):
+				strip.setPixelColor(m2s[z,y,x], Color(*mat5[x,y,z]))
+	strip.show()
+
+def Cube_color():
+	mat5 = np.zeros((5,5,5,3),dtype=int)
+	f = np.array([0,255,0])
+	u = np.array([255,255,255])
+	d = np.array([244,213,0])
+	r = np.array([255,0,0])
+	l = np.array([255,165,0])
+	b = np.array([0,0,255])
+
+def flying_bee(strip,color,wait_ms=20):
+	global m2s
+	dir = [-1,0,1]
+	pos = [3,3,3]
+	mat5 = np.zeros((5,5,5,3),dtype=int)
+	#strip.setPixelColor(m2s[*pos],mat5[*pos])
+	#strip.show()
+	time.sleep(wait_ms/1000.0)
+	for i in range(100):
+		while(True):
+			nextPos = pos
+			nextPos[0] += random.choice(dir)
+			nextPos[1] += random.choice(dir)
+			nextPos[2] += random.choice(dir)
+			if(0 <= nextPos[0] < 5 and 0 <= nextPos[1] < 5 and 0 <= nextPos[2] < 5):
+				break
+		pos = nextPos
+		#strip.setPixelColor(m2s[*pos],mat5[*pos])
+		#strip.show()
+		time.sleep(wait_ms/1000.0)
+		print(*pos)
+
+
+
 # Main program logic follows:
 if __name__ == '__main__':
 	# Process arguments
@@ -95,13 +169,12 @@ if __name__ == '__main__':
 		print('Use "-c" argument to clear LEDs on exit')
 
 	try:
-
 		while True:
+			"""
 			print ('Color wipe animations.')
 			colorWipe(strip, Color(255, 0, 0))  # Red wipe
 			colorWipe(strip, Color(0, 255, 0))  # Blue wipe
 			colorWipe(strip, Color(0, 0, 255))  # Green wipe
-			"""
 			print ('Theater chase animations.')
 			theaterChase(strip, Color(127, 127, 127))  # White theater chase
 			theaterChase(strip, Color(127,   0,   0))  # Red theater chase

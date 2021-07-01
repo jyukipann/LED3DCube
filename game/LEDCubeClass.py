@@ -5,9 +5,9 @@ from tkinter import messagebox as mg
 from collections import deque
 import time
 #from rpi_ws281x import *
-import rpi_ws281x
+#import rpi_ws281x
 # LED strip configuration:
-#LED_COUNT      = 3      # Number of LED pixels.
+LED_COUNT      = 125      # Number of LED pixels.
 LED_PIN        = 12      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
@@ -51,10 +51,10 @@ class LED_Cube:
 		self.n = n
 		self.cube = np.zeros((self.n,self.n,self.n,3),dtype="i2")
 		global LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL
-		self.strip = rpi_ws281x.Adafruit_NeoPixel(n**3, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+		#self.strip = rpi_ws281x.Adafruit_NeoPixel(n**3, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 		self.outputing = threading.Thread(target=self.output)
 		self.outputing.start()
-		self.destory = False
+		self._destory = False
 
 	def __reset__(self):
 		self.cube = np.zeros((self.n,self.n,self.n,3),dtype="i2")
@@ -79,12 +79,13 @@ class LED_Cube:
 
 
 	def output(self):
-		while not self.destory:
+		while not super._destory:
 			#転置必要
 			flat = self.cube.flatten()
-			for i in range(self.n ** 3):
+			'''for i in range(self.n ** 3):
 				self.strip.setPixelColor(i*3, rpi_ws281x.Color(flat[i*3],flat[i*3+1],flat[i*3+2]))
 			self.strip.show()
+			'''
 			time.sleep(16.6/1000.0)
 		
 
