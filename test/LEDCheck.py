@@ -189,6 +189,7 @@ def flying_bee(strip,colors,wait_ms=50):
 	mat5[4:5,0:1,:] = np.array(b,dtype=int)
 	mat5[0:1,4:5,:] = np.array(b,dtype=int)
 	mat5[4:5,4:5,:] = np.array(b,dtype=int)
+	strip2mat(strip, mat5)
 	strip.show()
 	time.sleep(wait_ms/1000.0)
 	for i in range(100):
