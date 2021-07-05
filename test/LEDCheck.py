@@ -192,7 +192,7 @@ def flying_bee(strip,colors,wait_ms=50):
 	strip.show()
 	time.sleep(wait_ms/1000.0)
 	for i in range(100):
-		strip2mat(strip, mat5)
+		#strip2mat(strip, mat5)
 		for k in range(num):
 			strip.setPixelColor(int(m2s[pos[k][0],pos[k][1],pos[k][2]]),Color(0,0,0))
 			nextPos[k] = pos[k]
