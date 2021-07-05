@@ -229,8 +229,8 @@ if __name__ == '__main__':
 
 	try:
 		while True:
+			print("flying bees")
 			flying_bee(strip,[Color(244,213,0),Color(0,0,255),Color(255,100,0),Color(255,0,0),Color(0,255,0),Color(255,0,255)])
-			"""
 			print ('Color wipe animations.')
 			colorWipe(strip, Color(255, 0, 0))  # Red wipe
 			colorWipe(strip, Color(0, 255, 0))  # Blue wipe
@@ -243,7 +243,7 @@ if __name__ == '__main__':
 			rainbow(strip)
 			rainbowCycle(strip)
 			theaterChaseRainbow(strip)
-			"""
+			
 
 	except KeyboardInterrupt:
 		if args.clear:
