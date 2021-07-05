@@ -45,8 +45,8 @@ def flying_bee(strip,color,wait_ms=60):
 	dir = [-1,0,1]
 	pos = [3,3,3]
 	mat5 = np.zeros((5,5,5,3),dtype=int)
-	#strip.setPixelColor(m2s[*pos],mat5[*pos])
-	#strip.show()
+	strip.setPixelColor(m2s[*pos],mat5[*pos])
+	strip.show()
 	time.sleep(wait_ms/1000.0)
 	for i in range(100):
 		nextPos = pos
@@ -59,8 +59,8 @@ def flying_bee(strip,color,wait_ms=60):
 			if(nextPos[j] >= 5):
 				nextPos[j] = 4
 		pos = nextPos
-		#strip.setPixelColor(m2s[*pos],mat5[*pos])
-		#strip.show()
+		strip.setPixelColor(m2s[*pos],mat5[*pos])
+		strip.show()
 		time.sleep(wait_ms/1000.0)
 		print(*pos)
 
