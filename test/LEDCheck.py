@@ -160,7 +160,7 @@ m2s = np.array(
 	[124, 123, 122, 121, 120],]]
 )
 import time, random
-def flying_bee(strip,color,wait_ms=60):
+def flying_bee(strip,color,wait_ms=500):
 	global m2s
 	colorWipe(strip, Color(0,0,0), 10)
 	dir = [-1,0,1]
