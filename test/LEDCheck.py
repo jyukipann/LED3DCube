@@ -168,11 +168,11 @@ def flying_bee(strip,colors,wait_ms=500):
 	nextPos = []
 	for i in range(num):
 		if(i >= 5):
-			num = 4
-			colors = colors[:5]
-			break
-		pos.append([i,i,i])
-		nextPos.append([i,i,i])
+			pos.append([0,0,0])
+			nextPos.append([0,0,0])
+		else:
+			pos.append([i,i,i])
+			nextPos.append([i,i,i])
 		strip.setPixelColor(int(m2s[pos[i][0],pos[i][1],pos[i][2]]),colors[i])
 	dir = [-1,0,1]
 	mat5 = np.zeros((5,5,5,3),dtype=int)
@@ -229,7 +229,7 @@ if __name__ == '__main__':
 
 	try:
 		while True:
-			flying_bee(strip,[Color(244,213,0),Color(0,0,255),Color(255,100,0),Color(255,0,0),Color(0,255,0)])
+			flying_bee(strip,[Color(244,213,0),Color(0,0,255),Color(255,100,0),Color(255,0,0),Color(0,255,0),Color(255,0,255)])
 			"""
 			print ('Color wipe animations.')
 			colorWipe(strip, Color(255, 0, 0))  # Red wipe
