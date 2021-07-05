@@ -160,33 +160,41 @@ m2s = np.array(
 	[124, 123, 122, 121, 120],]]
 )
 import time, random
-def flying_bee(strip,color,wait_ms=500):
+def flying_bee(strip,colors,wait_ms=500):
 	global m2s
 	colorWipe(strip, Color(0,0,0), 10)
+	num = len(colors)
+	pos = []
+	nextPos = []
+	for i in range(num):
+		if(i >= 5):
+			num = 4
+			colors = colors[:5]
+			break
+		pos.append([i,i,i])
+		nextPos.append([i,i,i])
+		strip.setPixelColor(int(m2s[pos[i][0],pos[i][1],pos[i][2]]),colors[i])
 	dir = [-1,0,1]
-	pos = [3,3,3]
-	mat5 = np.zeros((5,5,5,3),dtype=int)
-	print(*mat5[pos[0],pos[1],pos[2]])
-	print(m2s[pos[0],pos[1],pos[2]])
-	strip.setPixelColor(int(m2s[pos[0],pos[1],pos[2]]),color)
 	strip.show()
 	time.sleep(wait_ms/1000.0)
+
 	for i in range(100):
 		strip.setPixelColor(int(m2s[pos[0],pos[1],pos[2]]),Color(0,0,0))
-		nextPos = pos
-		nextPos[0] += random.choice(dir)
-		nextPos[1] += random.choice(dir)
-		nextPos[2] += random.choice(dir)
-		for j in range(3):
-			if(nextPos[j] < 0):
-				nextPos[j] = 0
-			if(nextPos[j] >= 5):
-				nextPos[j] = 4
-		pos = nextPos
-		strip.setPixelColor(int(m2s[pos[0],pos[1],pos[2]]),color)
+		for k in range(num):
+			nextPos[k] = pos[k]
+			nextPos[k][0] += random.choice(dir)
+			nextPos[k][1] += random.choice(dir)
+			nextPos[k][2] += random.choice(dir)
+			for j in range(3):
+				if(nextPos[k][j] < 0):
+					nextPos[k][j] = 0
+				if(nextPos[k][j] >= 5):
+					nextPos[k][j] = 4
+			pos[k] = nextPos[k]
+			strip.setPixelColor(int(m2s[pos[0],pos[1],pos[2]]),colors[k])
 		strip.show()
 		time.sleep(wait_ms/1000.0)
-		print(*pos)
+		#print(*pos)
 
 
 # Main program logic follows:
@@ -207,7 +215,7 @@ if __name__ == '__main__':
 
 	try:
 		while True:
-			flying_bee(strip,Color(244,213,0))
+			flying_bee(strip,[Color(244,213,0),Color(0,0,255)])
 			"""
 			print ('Color wipe animations.')
 			colorWipe(strip, Color(255, 0, 0))  # Red wipe
