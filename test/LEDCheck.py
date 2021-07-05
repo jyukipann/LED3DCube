@@ -116,7 +116,7 @@ def strip2mat(strip, mat5):
 	for z in range(5):
 		for y in range(5):
 			for x in range(5):
-				strip.setPixelColor(int(m2s[z,y,x]), Color(mat5[x,y,z,0],mat5[x,y,z,1],mat5[x,y,z,2]))
+				strip.setPixelColor(int(m2s[z,y,x]), Color(int(mat5[x,y,z,0]),int(mat5[x,y,z,1]),int(mat5[x,y,z,2])))
 	strip.show()
 
 def Cube_color():
