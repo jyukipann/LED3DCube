@@ -160,7 +160,7 @@ m2s = np.array(
 	[124, 123, 122, 121, 120],]]
 )
 import time, random
-def flying_bee(strip,colors,wait_ms=500):
+def flying_bee(strip,colors,wait_ms=50):
 	global m2s
 	colorWipe(strip, Color(0,0,0), 10)
 	num = len(colors)
@@ -247,4 +247,4 @@ if __name__ == '__main__':
 
 	except KeyboardInterrupt:
 		if args.clear:
-			colorWipe(strip, Color(0,0,0), 10)
+			colorWipe(strip, Color(0,0,0), 1)
