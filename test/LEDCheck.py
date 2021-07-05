@@ -204,6 +204,7 @@ if __name__ == '__main__':
 
 	try:
 		while True:
+			flying_bee(strip,Color(244,213,0))
 			"""
 			print ('Color wipe animations.')
 			colorWipe(strip, Color(255, 0, 0))  # Red wipe
