@@ -179,8 +179,8 @@ def flying_bee(strip,colors,wait_ms=500):
 	time.sleep(wait_ms/1000.0)
 
 	for i in range(100):
-		strip.setPixelColor(int(m2s[pos[0],pos[1],pos[2]]),Color(0,0,0))
 		for k in range(num):
+			strip.setPixelColor(int(m2s[pos[k][0],pos[k][1],pos[k][2]]),Color(0,0,0))
 			nextPos[k] = pos[k]
 			nextPos[k][0] += random.choice(dir)
 			nextPos[k][1] += random.choice(dir)
