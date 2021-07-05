@@ -166,6 +166,7 @@ def flying_bee(strip,color,wait_ms=60):
 	dir = [-1,0,1]
 	pos = [3,3,3]
 	mat5 = np.zeros((5,5,5,3),dtype=int)
+	print(*mat5[pos[0],pos[1],pos[2]])
 	strip.setPixelColor(m2s[pos[0],pos[1],pos[2]],Color(*mat5[pos[0],pos[1],pos[2]]))
 	strip.show()
 	time.sleep(wait_ms/1000.0)
