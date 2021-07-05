@@ -191,7 +191,7 @@ def flying_bee(strip,colors,wait_ms=500):
 				if(nextPos[k][j] >= 5):
 					nextPos[k][j] = 4
 			pos[k] = nextPos[k]
-			strip.setPixelColor(int(m2s[pos[0],pos[1],pos[2]]),colors[k])
+			strip.setPixelColor(int(m2s[pos[k][0],pos[k][1],pos[k][2]]),colors[k])
 		strip.show()
 		time.sleep(wait_ms/1000.0)
 		#print(*pos)
