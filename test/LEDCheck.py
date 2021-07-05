@@ -17,7 +17,7 @@ LED_PIN        = 12      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 225     # Set to 0 for darkest and 255 for brightest
+LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
@@ -167,6 +167,7 @@ def flying_bee(strip,color,wait_ms=60):
 	pos = [3,3,3]
 	mat5 = np.zeros((5,5,5,3),dtype=int)
 	print(*mat5[pos[0],pos[1],pos[2]])
+	print(m2s[pos[0],pos[1],pos[2]])
 	strip.setPixelColor(m2s[pos[0],pos[1],pos[2]],color)
 	strip.show()
 	time.sleep(wait_ms/1000.0)
